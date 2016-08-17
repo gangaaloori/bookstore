@@ -1,21 +1,30 @@
-package com.bookstore;
+package com.bookstore.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
  * @author Ganga Aloori
  */
+@Entity
+@Table(name = "books")
 public class Book implements Serializable {
 
+    @Id
     private String isbn;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String author;
 
     protected Book() {}
 
-    public Book(String isbn, String title, String author) {
+    public Book(final String isbn, final String title, final String author) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;

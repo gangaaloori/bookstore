@@ -1,0 +1,22 @@
+<!--
+Used by Travis to deploy Docker image to Docker Hub after a successful
+build on the master branch. See .travis.yml for more.
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <servers>
+        <!-- Docker Hub Deployment -->
+        <server>
+            <id>docker-hub</id>
+            <username>${env.DOCKER_HUB_USERNAME}</username>
+            <password>${env.DOCKER_HUB_PASSWORD}</password>
+            <configuration>
+                <email>ganga.aloori@gmail.com</email>
+            </configuration>
+        </server>
+    </servers>
+
+</settings>

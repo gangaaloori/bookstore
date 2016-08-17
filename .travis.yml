@@ -1,3 +1,21 @@
+
+services:
+  - docker
+
 language: java
+
 jdk:
   - oraclejdk8
+
+env:
+  global:
+    - DOCKER_HUB_USERNAME=gangaaloori
+    - secure: "a37halSuwJH3yezdvIPXSyXsz02FzYPtwks2BNi1dYP6rY9JsGZj/ZNN5YvyRM5qa4pi0gu/XuMLzUpQGx7gVJqyWAxmDCl51PqxV9+JudV+G+9ZQIo0enVqcWQPJuf+p2zF0RMX4faga1AESZ6u1T9E0iWpSqKLvvOX+htf5Xu9VrLRMPvaCI0289Mr+1wYYAWNSztAqIFRA/Omunm3RYKd69TA/6HSJ7Ndn7WMEx9uSf+mLQOd8REVPF0E7L433H7wB5tCEkgCVc24kQY2qkQxmPMUxRtFl/JB0QzYHYRpsC0yUn7LLEt/FiiW9L9pB9WYw/gL/JRxq29TMZHb2v6Dtlmwzj7Wa4sXMvhm/bf39aKjM1gOqARoyMiGc1LOo34BMnDMmEFa72+vZ8cq1wdnNPb0KGysliUS87RVHQjd6bdc46m+iLpWQMVINFRKhgUQBX9kZF64j1IvmN5CmcSvTVWJxlB8HAMmN8oZ3pVzetgwwZoTwGMWyywL2BqgDzLfb1gwfgNMIfMYk0s7jj46RR/wpsFiMDw5ek+WIGrHQG177sRenNKivQcewziARLnuvgbvHgkjHdmu6L1NcsBbpyuHorYD5JE0ivOc2FJYBx91wlDSjUKMhJC9CrYfN7T9YstSFrpcJh1gfa/j317oZZKHR8/a3TTXPRe2YiQ="
+
+before_install:
+  # troubleshooting info in case of problems
+  - docker version
+  - docker info
+
+after_success:
+  - "[[ $TRAVIS_BRANCH == \"master\" ]] && mvn --settings docker-hub-settings.xml docker:push"
