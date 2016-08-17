@@ -18,4 +18,4 @@ before_install:
   - docker info
 
 after_success:
-  - "[[ $TRAVIS_BRANCH == \"master\" ]] && mvn --settings docker-hub-settings.xml docker:push"
+  - "[[ $TRAVIS_BRANCH == \"master\" ]] && mvn --settings docker-hub-settings.xml docker:build docker:push"
