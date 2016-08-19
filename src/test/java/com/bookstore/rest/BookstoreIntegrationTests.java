@@ -20,7 +20,6 @@ import java.util.List;
 
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 
 /**
@@ -31,9 +30,10 @@ import static org.hamcrest.core.IsCollectionContaining.hasItems;
 public class BookstoreIntegrationTests {
 
     private static List<Book> books = Arrays.asList(
-            new Book("0321356683", "Effective Java", "Joshua Bloch"),
-            new Book("0132350882", "Clean Code", "Robert C Martin"),
-            new Book("1935182366", "Camel In Action", "Claus Ibsen"));
+            new Book("0321356683", "Effective Java", "Joshua Bloch", 272),
+            new Book("0132350882", "Clean Code", "Robert C Martin", 258),
+            new Book("1935182366", "Camel In Action", "Claus Ibsen", 558),
+            new Book("0321643518", "Java Puzzlers", "Joshua Bloch", 220));
 
     @LocalServerPort
     private int port;
@@ -43,6 +43,7 @@ public class BookstoreIntegrationTests {
 
     @Before
     public void setup() {
+        bookRepository.deleteAll();
         bookRepository.save(books);
         RestAssured.port = port;
     }
@@ -58,9 +59,24 @@ public class BookstoreIntegrationTests {
         when().
                 get("/bookstore/v1/books").
         then().
-                body("$", hasSize(3)).
-                body("isbn", hasItems("0321356683", "0132350882", "1935182366")).
-                body("title", hasItems("Effective Java", "Clean Code", "Camel In Action")).
+                body("isbn", hasItems("0321356683", "0132350882", "1935182366", "0321643518")).
+                body("title", hasItems("Effective Java", "Clean Code", "Camel In Action", "Java Puzzlers")).
+                statusCode(HttpStatus.SC_OK).
+                contentType(ContentType.JSON);
+    }
+
+    @Test
+    public void getBooksByAuthor() throws Exception {
+
+        final String author = "Joshua Bloch";
+        given().
+                queryParam("author", author);
+        when().
+                get("/bookstore/v1/books").
+        then().
+                body("isbn", hasItems("0321356683", "0321643518")).
+                body("title", hasItems("Effective Java", "Java Puzzlers")).
+                body("author", hasItems(author, author)).
                 statusCode(HttpStatus.SC_OK).
                 contentType(ContentType.JSON);
     }
@@ -68,7 +84,7 @@ public class BookstoreIntegrationTests {
     @Test
     public void addBook() throws Exception {
 
-        final Book book = new Book("0321146530", "Test Driven Development", "Kent Beck");
+        final Book book = new Book("0321146530", "Test Driven Development", "Kent Beck", 346);
 
         given().
                 contentType(ContentType.JSON).
@@ -114,7 +130,7 @@ public class BookstoreIntegrationTests {
     public void updateBook() throws Exception {
 
         final String isbn = "1935182366";
-        final Book book = new Book("0321146530", "Test Driven Development", "Kent Beck");
+        final Book book = new Book("0321146530", "Test Driven Development", "Kent Beck", 346);
 
         given().
                 contentType(ContentType.JSON).

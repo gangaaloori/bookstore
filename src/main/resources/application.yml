@@ -1,20 +1,32 @@
-spring.datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:bootexample;MODE=MySQL
-
-spring.jpa:
-    hibernate.ddl-auto: create-drop
-
 server:
   port: 9000
+spring:
+  profiles.active: dev
 
-project:
-  name: bookstore
-  version: 0.1
-  description: A simple Bookstore application with basic CRUD operations.
-info:
-  build:
-    artifact: ${project.artifactId}
-    name: ${project.name}
-    description: ${project.description}
-    version: ${project.version}
+---
+
+spring:
+  profiles: dev
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:bookstore;MODE=MySQL
+    initialize: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+---
+
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://db:3306/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    initialize: true
+  jpa:
+    generate-ddl: true
+    hibernate:
+      dialect: org.hibernate.dialect.MySQLInnoDBDialect
+      ddl-auto: create-drop
+      show-sql: true

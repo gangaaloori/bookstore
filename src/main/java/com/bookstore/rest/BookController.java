@@ -33,8 +33,8 @@ public class BookController {
     @RequestMapping(method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<Book> getBooks() {
-        return bookService.getBooks();
+    public List<Book> getBooks(@RequestParam(required = false, value = "author") String author) {
+        return bookService.getBooks(author);
     }
 
     @RequestMapping(value = "/{isbn}",

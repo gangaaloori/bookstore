@@ -1,0 +1,22 @@
+version: '2'
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: pass123
+      MYSQL_DATABASE: bookstore
+      MYSQL_USER: demo
+      MYSQL_PASSWORD: demo
+  web:
+    image: gangaaloori/bookstore
+    environment:
+      DB_NAME: bookstore
+      DB_USER: demo
+      DB_PASSWORD: demo
+      spring.profiles.active: prod
+    ports:
+     - "9000:9000"
+    links:
+     - db
+    depends_on:
+     - db

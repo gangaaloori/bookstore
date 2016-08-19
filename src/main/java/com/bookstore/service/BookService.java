@@ -31,11 +31,24 @@ public class BookService {
         bookRepository.delete(isbn);
     }
 
-    public List<Book> getBooks() {
+    public List<Book> getBooks(final String author) {
+        if (author != null) {
+            return getBooksByAuthor(author);
+        }
+        else {
+            return getAllBooks();
+        }
+    }
+
+    private List<Book> getAllBooks() {
         final Iterable<Book> bookIterable = bookRepository.findAll();
         final List<Book> books = new ArrayList<>();
         bookIterable.iterator().forEachRemaining(books::add);
         return books;
+    }
+
+    private List<Book> getBooksByAuthor(final String author) {
+        return bookRepository.findAllByAuthorIgnoringCase(author);
     }
 
     public Book getBook(final String isbn) {

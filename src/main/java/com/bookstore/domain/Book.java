@@ -22,9 +22,11 @@ public class Book implements Serializable {
     @Column(nullable = false)
     private String author;
 
+    private Integer pages;
+
     protected Book() {}
 
-    public Book(final String isbn, final String title, final String author) {
+    public Book(final String isbn, final String title, final String author, final Integer pages) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
@@ -42,8 +44,12 @@ public class Book implements Serializable {
         return author;
     }
 
+    public Integer getPages() {
+        return pages;
+    }
+
     @Override
     public String toString() {
-        return String.format("Book[isbn=%s, title=%s, author=%s]", isbn, title, author);
+        return String.format("Book[isbn=%s, title=%s, author=%s, pages=%d]", isbn, title, author, pages);
     }
 }
